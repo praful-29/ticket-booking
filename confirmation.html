@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .confirmation-container {
+            text-align: center;
+            margin: 100px auto;
+        }
+
+        .confirmation-container h2 {
+            color: #28a745;
+        }
+
+        .confirmation-container p {
+            font-size: 1.2em;
+        }
+
+        .btn-home {
+            padding: 10px 20px;
+            font-size: 1.1em;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .btn-home:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation-container">
+        <h2>Booking Confirmed!</h2>
+        <p>Thank you for booking with us.</p>
+        <p>Your seats: <span id="confirmed-seats">None</span></p>
+        <p>Total Price: ₹<span id="confirmed-total-price">0</span></p>
+        <a href="index.html" class="btn-home">Go to Home</a>
+    </div>
+
+    <script>
+        // Retrieve booking details from localStorage
+        const confirmedSeats = localStorage.getItem('selectedSeats') || 'None';
+        const confirmedTotalPrice = localStorage.getItem('totalPrice') || '0';
+
+        // Update confirmation page with booking details
+        document.getElementById('confirmed-seats').innerText = confirmedSeats;
+        document.getElementById('confirmed-total-price').innerText = confirmedTotalPrice;
+    </script>
+</body>
+</html>

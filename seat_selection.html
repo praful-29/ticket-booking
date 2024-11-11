@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Seat Booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #282c34; /* Dark background */
+            color: #ffffff; /* White text */
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .theater {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
+
+        .seat {
+            width: 40px; /* Increased width for better appearance */
+            height: 40px; /* Increased height for better appearance */
+            border: 2px solid #444; /* Slightly thicker border */
+            background-color: #8B0000; /* Seat color (dark red) */
+            display: inline-block; /* Display inline */
+            margin: 5px; /* Space between seats */
+            cursor: pointer; /* Pointer cursor on hover */
+            border-radius: 5px; /* Rounded corners */
+            position: relative; /* Position for seat label */
+            transition: background-color 0.3s, transform 0.3s; /* Animation for hover effect */
+        }
+
+        .seat.selected {
+            background-color: #FFD700; /* Color when selected (gold) */
+            transform: scale(1.1); /* Slightly enlarge selected seat */
+        }
+
+        .vip {
+            background-color: #0000CD; /* VIP seat color (medium blue) */
+        }
+
+        .vip.selected {
+            background-color: #FFD700; /* VIP selected color (gold) */
+            transform: scale(1.1); /* Slightly enlarge selected seat */
+        }
+
+        .screen {
+            width: 80%;
+            height: 50px;
+            background-color: #333; /* Darker screen color */
+            color: white; /* White text */
+            text-align: center;
+            line-height: 50px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-size: 24px; /* Larger screen text */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Shadow for screen */
+        }
+
+        .total-price {
+            font-size: 20px; /* Slightly larger font */
+            margin: 20px;
+            text-align: center;
+        }
+
+        .seat-selection {
+            text-align: center;
+        }
+
+        /* Button styles */
+        button {
+            background-color: #007bff; /* Button color */
+            color: white; /* Button text color */
+            border: none; /* No border */
+            padding: 10px 20px; /* Button padding */
+            border-radius: 5px; /* Rounded button corners */
+            cursor: pointer; /* Pointer cursor */
+            transition: background-color 0.3s; /* Animation for button */
+            font-size: 16px; /* Larger font for button */
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Darker button color on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="theater">
+        <div class="screen">SCREEN</div>
+
+        <!-- Generating Seats Dynamically -->
+        <script>
+            const totalRows = 15; // Total rows (A to O)
+            const seatsPerRow = 20; // Total seats in each row
+            const theaterContainer = document.querySelector('.theater');
+
+            // Create seat rows
+            for (let i = 0; i < totalRows; i++) {
+                const row = document.createElement('div');
+                row.className = 'row';
+                const rowLabel = String.fromCharCode(65 + i); // Generate row labels (A to O)
+
+                for (let j = 1; j <= seatsPerRow; j++) {
+                    const seat = document.createElement('div');
+                    seat.className = 'seat';
+                    seat.setAttribute('data-price', (i < 3) ? 350 : 150); // First 3 rows are VIP
+                    seat.textContent = `${rowLabel}${j}`; // Set seat text (e.g., A1, B2)
+                    row.appendChild(seat);
+                }
+                theaterContainer.appendChild(row);
+            }
+        </script>
+
+        <div class="total-price">
+            <h3>Total Price: <span id="total-price">0</span> INR</h3>
+        </div>
+        <div class="seat-selection">
+            <h3>Select Your Seats</h3>
+            <button id="book-seats">Book Seats</button>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript code for seat selection and booking functionality
+        const seats = document.querySelectorAll('.seat');
+        const totalPriceElement = document.getElementById('total-price');
+        const bookSeatsButton = document.getElementById('book-seats');
+        let totalPrice = 0;
+
+        seats.forEach(seat => {
+            seat.addEventListener('click', () => {
+                seat.classList.toggle('selected');
+                updateTotalPrice();
+            });
+        });
+
+        function updateTotalPrice() {
+            totalPrice = 0;
+            seats.forEach(seat => {
+                if (seat.classList.contains('selected')) {
+                    totalPrice += parseInt(seat.getAttribute('data-price'));
+                }
+            });
+            totalPriceElement.textContent = totalPrice;
+        }
+
+        bookSeatsButton.addEventListener('click', () => {
+            const selectedSeats = [];
+            seats.forEach(seat => {
+                if (seat.classList.contains('selected')) {
+                    selectedSeats.push(seat.textContent);
+                }
+            });
+
+            if (selectedSeats.length > 0) {
+                alert(`You have booked seats: ${selectedSeats.join(', ')}\nTotal Price: ${totalPrice} INR`);
+                // Here you can add the functionality to send this data to a server or process the booking further
+            } else {
+                alert('Please select at least one seat to book.');
+            }
+        });
+    </script>
+</body>
+</html>
